@@ -4,6 +4,8 @@ A simple Docker service that fetches calendar data from Sonarr and Radarr, merge
 
 This allows you to see all your upcoming TV shows and movies in one chronological list.
 
+<img width="537" height="416" alt="Screenshot 2025-08-20 at 23 41 31" src="https://github.com/user-attachments/assets/479c2bd4-8e14-4cc6-9e27-9945eabed699" />
+
 ## Prerequisites
 
 * **Docker:** [Install Docker](https://docs.docker.com/engine/install/)
