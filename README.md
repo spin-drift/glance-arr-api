@@ -42,11 +42,11 @@ services:
       # Example: "4000:5000"
       - "5000:5000"
     environment:
-      SONARR_URL: http://192.168.1.9:8989
-      SONARR_API_KEY: 83b7cae5f2fd47a681454458cedc0444
+      SONARR_URL: http://<SONARR_HOST>:8989
+      SONARR_API_KEY: your_sonarr_api_key
       SONARR_DAYS_AHEAD: 90
-      RADARR_URL: http://192.168.1.9:7878
-      RADARR_API_KEY: 83a3f568246a4d959c0132a22e085388
+      RADARR_URL: http://<RADARR_HOST>:7878
+      RADARR_API_KEY: your_radarr_api_key
       RADARR_DAYS_AHEAD: 365
 ```
 
