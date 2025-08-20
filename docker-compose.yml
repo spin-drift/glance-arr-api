@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  agenda-api:
+    image: danzkigg/glance-agenda-api:latest
+    container_name: glance-agenda-api
+    restart: unless-stopped
+    ports:
+      # Exposes the API on port 5000.
+      # You can change the first number if that port is already in use.
+      # Example: "4000:5000"
+      - "5000:5000"
+    environment:
+      SONARR_URL: http://<SONARR_HOST>:8989
+      SONARR_API_KEY: your_sonarr_api_key
+      SONARR_DAYS_AHEAD: 90
+      RADARR_URL: http://<RADARR_HOST>:7878
+      RADARR_API_KEY: your_radarr_api_key
+      RADARR_DAYS_AHEAD: 365
