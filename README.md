@@ -76,7 +76,6 @@ Use the following configuration for your `custom-api` widget in Glance.
     options:
       collapse_after: 12 # Control the "Show More" button here. Use -1 to disable.
     template: |
-      {{/* Read the setting from the widget options, not the API */}}
       {{ $collapseAfter := .Options.IntOr "collapse_after" -1 }}
       {{ $today := (offsetNow "0h" | formatTime "2006-01-02") }}
 
