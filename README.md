@@ -1,10 +1,19 @@
+<div align="center">
+
 # Glance Agenda API
 
-A simple Docker service that fetches calendar data from Sonarr and Radarr, merges and sorts it, and provides a single, unified API endpoint for the Glance widget.
+![README](https://img.shields.io/badge/Actively%20Maintained-Green)
+![README](https://img.shields.io/github/v/release/danzkigg/glance-agenda-api)
+![README](https://img.shields.io/docker/pulls/danzkigg/glance-agenda-api)
 
+A simple Docker service that fetches calendar data from Sonarr and Radarr, merges and sorts it, and provides a single, unified API endpoint for the Glance widget.
 This allows you to see all your upcoming TV shows and movies in one chronological list.
 
+___
+
 <img width="537" height="416" alt="Screenshot 2025-08-20 at 23 41 31" src="https://github.com/user-attachments/assets/479c2bd4-8e14-4cc6-9e27-9945eabed699" />
+
+</div>
 
 ## Prerequisites
 
