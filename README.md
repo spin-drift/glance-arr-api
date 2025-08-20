@@ -26,7 +26,7 @@ cd glance-agenda
 
 ### Step 2: Create Configuration Files
 
-Inside the `glance-agenda` folder you just created, create the following two files.
+Inside the `glance-agenda` folder you just created, create the following file.
 
 **`docker-compose.yml`** 
 
