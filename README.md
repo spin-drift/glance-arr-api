@@ -142,7 +142,7 @@ Use the following configuration for your `custom-api` widget in Glance.
 
 ## Updating the Service
 
-To update to the latest version of the API image after the owner publishes changes, run these commands from your `glance-agenda` folder:
+To update to the latest version of the API image, run these commands from your `glance-agenda` folder:
 
 ```bash
 # Pull the latest image from Docker Hub
