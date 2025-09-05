@@ -1,8 +1,19 @@
+<div align="center">
+
 # Glance Agenda API
 
-A simple Docker service that fetches calendar data from Sonarr and Radarr, merges and sorts it, and provides a single, unified API endpoint for the Glance widget.
+![README](https://img.shields.io/badge/Actively%20Maintained-Green)
+![README](https://img.shields.io/github/v/release/danzkigg/glance-agenda-api)
+![README](https://img.shields.io/docker/pulls/danzkigg/glance-agenda-api)
 
+A simple Docker service that fetches calendar data from Sonarr and Radarr, merges and sorts it, and provides a single, unified API endpoint for the Glance widget.
 This allows you to see all your upcoming TV shows and movies in one chronological list.
+
+___
+
+<img width="537" height="416" alt="Screenshot 2025-08-20 at 23 41 31" src="https://github.com/user-attachments/assets/479c2bd4-8e14-4cc6-9e27-9945eabed699" />
+
+</div>
 
 ## Prerequisites
 
@@ -26,7 +37,7 @@ cd glance-agenda
 
 ### Step 2: Create Configuration Files
 
-Inside the `glance-agenda` folder you just created, create the following two files.
+Inside the `glance-agenda` folder you just created, create the following file.
 
 **`docker-compose.yml`** 
 
@@ -42,11 +53,11 @@ services:
       # Example: "4000:5000"
       - "5000:5000"
     environment:
-      SONARR_URL: http://192.168.1.9:8989
-      SONARR_API_KEY: 83b7cae5f2fd47a681454458cedc0444
+      SONARR_URL: http://<SONARR_HOST>:8989
+      SONARR_API_KEY: your_sonarr_api_key
       SONARR_DAYS_AHEAD: 90
-      RADARR_URL: http://192.168.1.9:7878
-      RADARR_API_KEY: 83a3f568246a4d959c0132a22e085388
+      RADARR_URL: http://<RADARR_HOST>:7878
+      RADARR_API_KEY: your_radarr_api_key
       RADARR_DAYS_AHEAD: 365
 ```
 
@@ -76,7 +87,6 @@ Use the following configuration for your `custom-api` widget in Glance.
     options:
       collapse_after: 12 # Control the "Show More" button here. Use -1 to disable.
     template: |
-      {{/* Read the setting from the widget options, not the API */}}
       {{ $collapseAfter := .Options.IntOr "collapse_after" -1 }}
       {{ $today := (offsetNow "0h" | formatTime "2006-01-02") }}
 
@@ -132,7 +142,7 @@ Use the following configuration for your `custom-api` widget in Glance.
 
 ## Updating the Service
 
-To update to the latest version of the API image after the owner publishes changes, run these commands from your `glance-agenda` folder:
+To update to the latest version of the API image, run these commands from your `glance-agenda` folder:
 
 ```bash
 # Pull the latest image from Docker Hub
