@@ -1,0 +1,18 @@
+version: 40
+jobs:
+- name: push to GitHub
+  steps:
+  - !PushRepository
+    name: push
+    remoteUrl: https://github.com/danzkigg/glance-agenda-api
+    passwordSecret: access_token
+    force: false
+    condition: SUCCESSFUL
+    optional: false
+  triggers:
+  - !BranchUpdateTrigger {}
+  - !TagCreateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 14400
