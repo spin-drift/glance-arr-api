@@ -66,7 +66,7 @@ services:
 Open your terminal, make sure you are in the `glance-agenda` folder, and run the service:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 The API will now be running and accessible at `http://<your-server-ip>:5000/api/agenda`.
@@ -146,8 +146,8 @@ To update to the latest version of the API image, run these commands from your `
 
 ```bash
 # Pull the latest image from Docker Hub
-docker-compose pull
+docker compose pull
 
 # Restart the container with the new image
-docker-compose up -d
+docker compose up -d
 ```
