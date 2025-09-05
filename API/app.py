@@ -26,11 +26,11 @@ def normalize_sonarr_item(item):
     }
 
 def normalize_radarr_item(item):
-    release_type = "Cinema"
+    release_type = "In Cinemas"
     release_date = item.get('inCinemas')
     if item.get('digitalRelease'):
         release_date = item.get('digitalRelease')
-        release_type = "Digital"
+        release_type = "Digital Release"
     return {
         "release_datetime": release_date,
         "title": item.get('title'),
