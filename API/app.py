@@ -39,6 +39,83 @@ def normalize_radarr_item(item):
         "details": release_type
     }
 
+def calculate_sonarr_stats(series_data):
+    """Calculate Sonarr statistics from series data"""
+    total_series = len(series_data)
+    series_ended = 0
+    series_continuing = 0
+    monitored_series = 0
+    unmonitored_series = 0
+    total_episodes = 0
+    episodes_with_files = 0
+    total_size = 0
+    
+    for series in series_data:
+        # Series status
+        if series.get('ended', False) or series.get('status') == 'ended':
+            series_ended += 1
+        elif series.get('status') == 'continuing':
+            series_continuing += 1
+            
+        # Monitoring status
+        if series.get('monitored', False):
+            monitored_series += 1
+        else:
+            unmonitored_series += 1
+            
+        # Episode statistics
+        stats = series.get('statistics', {})
+        total_episodes += stats.get('totalEpisodeCount', 0)
+        episodes_with_files += stats.get('episodeFileCount', 0)
+        total_size += stats.get('sizeOnDisk', 0)
+    
+    # Convert size to TiB
+    total_size_tib = total_size / (1024**4) if total_size > 0 else 0
+    
+    return {
+        "series": total_series,
+        "ended": series_ended,
+        "continuing": series_continuing,
+        "monitored": monitored_series,
+        "unmonitored": unmonitored_series,
+        "episodes": total_episodes,
+        "files": episodes_with_files,
+        "total_file_size": f"{total_size_tib:.1f} TiB"
+    }
+
+def calculate_radarr_stats(movies_data):
+    """Calculate Radarr statistics from movies data"""
+    total_movies = len(movies_data)
+    movies_with_files = 0
+    monitored_movies = 0
+    unmonitored_movies = 0
+    total_size = 0
+    
+    for movie in movies_data:
+        # File status
+        if movie.get('hasFile', False):
+            movies_with_files += 1
+            
+        # Monitoring status
+        if movie.get('monitored', False):
+            monitored_movies += 1
+        else:
+            unmonitored_movies += 1
+            
+        # Size calculation
+        total_size += movie.get('sizeOnDisk', 0)
+    
+    # Convert size to TiB
+    total_size_tib = total_size / (1024**4) if total_size > 0 else 0
+    
+    return {
+        "movies": total_movies,
+        "movie_files": movies_with_files,
+        "monitored": monitored_movies,
+        "unmonitored": unmonitored_movies,
+        "total_file_size": f"{total_size_tib:.1f} TiB"
+    }
+
 @app.route('/api/agenda')
 def get_agenda():
     all_items = []
@@ -94,5 +171,60 @@ def get_agenda():
 
     return jsonify(agenda_list)
 
+@app.route('/api/stats')
+def get_stats():
+    """Get combined statistics from both Sonarr and Radarr"""
+    stats = {
+        "sonarr": {},
+        "radarr": {},
+        "error": None
+    }
+    
+    # Fetch Sonarr series data
+    try:
+        sonarr_endpoint = f"{SONARR_URL}/api/v3/series"
+        headers = {'X-Api-Key': SONARR_API_KEY}
+        response = requests.get(sonarr_endpoint, headers=headers, timeout=10)
+        response.raise_for_status()
+        sonarr_data = response.json()
+        stats["sonarr"] = calculate_sonarr_stats(sonarr_data)
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching Sonarr stats: {e}")
+        stats["error"] = f"Sonarr error: {str(e)}"
+        stats["sonarr"] = {
+            "series": 0,
+            "ended": 0,
+            "continuing": 0,
+            "monitored": 0,
+            "unmonitored": 0,
+            "episodes": 0,
+            "files": 0,
+            "total_file_size": "0.0 TiB"
+        }
+    
+    # Fetch Radarr movies data
+    try:
+        radarr_endpoint = f"{RADARR_URL}/api/v3/movie"
+        headers = {'X-Api-Key': RADARR_API_KEY}
+        response = requests.get(radarr_endpoint, headers=headers, timeout=10)
+        response.raise_for_status()
+        radarr_data = response.json()
+        stats["radarr"] = calculate_radarr_stats(radarr_data)
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching Radarr stats: {e}")
+        if stats["error"]:
+            stats["error"] += f" | Radarr error: {str(e)}"
+        else:
+            stats["error"] = f"Radarr error: {str(e)}"
+        stats["radarr"] = {
+            "movies": 0,
+            "movie_files": 0,
+            "monitored": 0,
+            "unmonitored": 0,
+            "total_file_size": "0.0 TiB"
+        }
+    
+    return jsonify(stats)
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
